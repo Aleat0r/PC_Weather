@@ -15,7 +15,6 @@ public interface MainContract {
         void init(MainContract.View view);
 
         void locationChanged(double longitude, double latitude);
-
     }
 
     interface View {

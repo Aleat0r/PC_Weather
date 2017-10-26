@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showHideProgressDialog() {
-        if(mProgressDialog.isShowing()){
+        if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         } else {
             mProgressDialog.show();
