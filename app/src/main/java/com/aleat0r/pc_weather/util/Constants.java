@@ -8,4 +8,7 @@ public class Constants {
 
     public static final float ZOOM_VALUE = 10f;
 
+    public static final String WEATHER_LATITUDE_INTENT_EXTRA = "weather_lat";
+    public static final String WEATHER_LONGITUDE_INTENT_EXTRA = "weather_lon";
+
 }

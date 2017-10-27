@@ -31,4 +31,10 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
+    <style name="WeatherAttributeSmallImageView">
+        <item name="android:layout_width">@dimen/card_small_image_size</item>
+        <item name="android:layout_height">@dimen/card_small_image_size</item>
+        <item name="android:padding">@dimen/small_margin</item>
+    </style>
+
 </resources>

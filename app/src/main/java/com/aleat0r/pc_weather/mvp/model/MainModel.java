@@ -5,13 +5,10 @@ import android.location.Location;
 
 import com.aleat0r.pc_weather.R;
 import com.aleat0r.pc_weather.mvp.MainContract;
-import com.aleat0r.pc_weather.network.ApiConstants;
+import com.aleat0r.pc_weather.network.ApiUtils;
 import com.aleat0r.pc_weather.network.OpenWeatherApiService;
 import com.aleat0r.pc_weather.pojo.current.CurrentWeatherData;
 import com.aleat0r.pc_weather.util.SingleShotLocationProvider;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -50,7 +47,7 @@ public class MainModel implements MainContract.Model {
 
     @Override
     public void getCurrentWeather(double longitude, double latitude, final OnGetWeatherCallback onGetWeatherCallback) {
-        mWebService.loadCurrentWeather(getQueryParams(longitude, latitude)).enqueue(new Callback<CurrentWeatherData>() {
+        mWebService.loadCurrentWeather(ApiUtils.getQueryParams(longitude, latitude)).enqueue(new Callback<CurrentWeatherData>() {
 
             @Override
             public void onResponse(Call<CurrentWeatherData> call, Response<CurrentWeatherData> response) {
@@ -65,18 +62,5 @@ public class MainModel implements MainContract.Model {
         });
     }
 
-    private Map getQueryParams(double longitude, double latitude) {
-        Map params = getGeneralQueryParams();
-        params.put(ApiConstants.QUERY_NAME_LONGITUDE, longitude);
-        params.put(ApiConstants.QUERY_NAME_LATITUDE, latitude);
-        return params;
-    }
-
-    private Map getGeneralQueryParams() {
-        Map<String, Object> params = new HashMap<>();
-        params.put(ApiConstants.QUERY_NAME_APP_ID, ApiConstants.API_KEY);
-        params.put(ApiConstants.QUERY_NAME_UNITS_OF_MEASURE, ApiConstants.METRIC_UNITS_OF_MEASURE);
-        return params;
-    }
 
 }

@@ -1,4 +1,4 @@
-package com.aleat0r.pc_weather.activity;
+package com.aleat0r.pc_weather.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         ButterKnife.bind(this);
         App.getComponent().inject(this);
         initViews();
+
         mPresenter.init(this);
         mPresenter.onCreate();
     }
@@ -147,10 +149,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
+                return true;
+            case R.id.menu_forecast:
+                mPresenter.openForecast();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

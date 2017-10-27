@@ -1,4 +1,4 @@
-package com.aleat0r.pc_weather.activity;
+package com.aleat0r.pc_weather.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;

@@ -1,5 +1,7 @@
 package com.aleat0r.pc_weather.pojo.current;
 
+import com.aleat0r.pc_weather.pojo.Coord;
+import com.aleat0r.pc_weather.pojo.Weather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -2,8 +2,11 @@ package com.aleat0r.pc_weather.dagger;
 
 import android.content.Context;
 
+import com.aleat0r.pc_weather.mvp.ForecastContract;
 import com.aleat0r.pc_weather.mvp.MainContract;
+import com.aleat0r.pc_weather.mvp.model.ForecastModel;
 import com.aleat0r.pc_weather.mvp.model.MainModel;
+import com.aleat0r.pc_weather.mvp.presenter.ForecastPresenter;
 import com.aleat0r.pc_weather.mvp.presenter.MainPresenter;
 import com.aleat0r.pc_weather.network.ApiConstants;
 import com.aleat0r.pc_weather.network.OpenWeatherApiService;
@@ -48,6 +51,12 @@ public class AppModule {
         return retrofit.create(OpenWeatherApiService.class);
     }
 
+    private OkHttpClient getLoggingInterceptor() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return new OkHttpClient.Builder().addInterceptor(logging).build();
+    }
+
     @Provides
     MainContract.Model provideMainModel(Context context, OpenWeatherApiService openWeatherApiService) {
         return new MainModel(context, openWeatherApiService);
@@ -58,10 +67,14 @@ public class AppModule {
         return new MainPresenter(model);
     }
 
-    private OkHttpClient getLoggingInterceptor() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return new OkHttpClient.Builder().addInterceptor(logging).build();
+    @Provides
+    ForecastContract.Model provideForecastModel(OpenWeatherApiService openWeatherApiService) {
+        return new ForecastModel(openWeatherApiService);
+    }
+
+    @Provides
+    ForecastContract.Presenter provideForecastPresenter(ForecastContract.Model model) {
+        return new ForecastPresenter(model);
     }
 
 }
