@@ -1,5 +1,6 @@
 package com.aleat0r.pc_weather.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,15 @@ import com.aleat0r.pc_weather.App;
 import com.aleat0r.pc_weather.R;
 import com.aleat0r.pc_weather.mvp.MainContract;
 import com.aleat0r.pc_weather.pojo.current.CurrentWeatherData;
+import com.aleat0r.pc_weather.util.Constants;
 import com.aleat0r.pc_weather.util.Utils;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -22,7 +31,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity implements MainContract.View, OnMapReadyCallback {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -42,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     ImageView mImgWeatherType;
 
     private ProgressDialog mProgressDialog;
+    private GoogleMap mGoogleMap;
 
     @Inject
     public MainContract.Presenter mPresenter;
@@ -59,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private void initViews() {
         initToolbar();
+        initMap();
         mProgressDialog = Utils.createProgressDialog(this);
     }
 
@@ -70,6 +81,26 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        googleMap.setMyLocationEnabled(true);
+        configMapUi(googleMap.getUiSettings());
+        googleMap.setOnMapClickListener(mOnMapClickListener);
+    }
+
+    private void configMapUi(UiSettings uiSettings) {
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setCompassEnabled(true);
+        uiSettings.setMapToolbarEnabled(false);
     }
 
     @Override
@@ -84,7 +115,22 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         Picasso.with(MainActivity.this).load(Utils.getWeatherIconUrl(MainActivity.this, weatherData.getWeather().get(0).getIcon()))
                 .placeholder(R.drawable.ic_place_holder)
                 .error(R.drawable.ic_error_loading).into(mImgWeatherType);
+
+        zoomMap(weatherData.getCoord().getLat(), weatherData.getCoord().getLon());
     }
+
+    private void zoomMap(double latitude, double longitude) {
+        CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
+                new LatLng(latitude, longitude), Constants.ZOOM_VALUE);
+        mGoogleMap.animateCamera(location);
+    }
+
+    GoogleMap.OnMapClickListener mOnMapClickListener = new GoogleMap.OnMapClickListener() {
+        @Override
+        public void onMapClick(LatLng latLng) {
+            mPresenter.locationChanged(latLng.longitude, latLng.latitude);
+        }
+    };
 
     @Override
     public void showMessage(String message) {
@@ -110,5 +156,4 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
