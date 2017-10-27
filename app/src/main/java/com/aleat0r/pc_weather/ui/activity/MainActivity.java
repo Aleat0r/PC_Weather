@@ -3,14 +3,12 @@ package com.aleat0r.pc_weather.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aleat0r.pc_weather.App;
 import com.aleat0r.pc_weather.R;
@@ -32,7 +30,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View, OnMapReadyCallback {
+public class MainActivity extends BaseActivity implements MainContract.View, OnMapReadyCallback {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -51,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @BindView(R.id.img_weather_type)
     ImageView mImgWeatherType;
 
-    private ProgressDialog mProgressDialog;
     private GoogleMap mGoogleMap;
 
     @Inject
@@ -72,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private void initViews() {
         initToolbar();
         initMap();
-        mProgressDialog = Utils.createProgressDialog(this);
     }
 
     private void initToolbar() {
@@ -133,20 +129,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             mPresenter.locationChanged(latLng.longitude, latLng.latitude);
         }
     };
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showHideProgressDialog() {
-        if (mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        } else {
-            mProgressDialog.show();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

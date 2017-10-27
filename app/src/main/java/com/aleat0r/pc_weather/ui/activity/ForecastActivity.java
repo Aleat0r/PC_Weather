@@ -3,12 +3,10 @@ package com.aleat0r.pc_weather.ui.activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.aleat0r.pc_weather.App;
 import com.aleat0r.pc_weather.R;
@@ -29,13 +27,12 @@ import butterknife.ButterKnife;
  * Created by Aleksandr Kovalenko on 27.10.2017.
  */
 
-public class ForecastActivity extends AppCompatActivity implements ForecastContract.View {
+public class ForecastActivity extends BaseActivity implements ForecastContract.View {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     private RecyclerView mRvForecast;
-    private ProgressDialog mProgressDialog;
 
     @Inject
     public ForecastContract.Presenter mPresenter;
@@ -56,7 +53,6 @@ public class ForecastActivity extends AppCompatActivity implements ForecastContr
     private void initViews() {
         initToolbar();
         initRecycler();
-        mProgressDialog = Utils.createProgressDialog(this);
     }
 
     private void initToolbar() {
@@ -82,20 +78,6 @@ public class ForecastActivity extends AppCompatActivity implements ForecastContr
         mRvForecast.setAdapter(forecastAdapter);
 
         mToolbar.setTitle(forecastWeatherData.getCity().getName());
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showHideProgressDialog() {
-        if (mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        } else {
-            mProgressDialog.show();
-        }
     }
 
     @Override

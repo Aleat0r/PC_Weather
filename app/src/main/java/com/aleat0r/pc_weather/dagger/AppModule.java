@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.aleat0r.pc_weather.mvp.ForecastContract;
 import com.aleat0r.pc_weather.mvp.MainContract;
+import com.aleat0r.pc_weather.mvp.SplashContract;
 import com.aleat0r.pc_weather.mvp.model.ForecastModel;
 import com.aleat0r.pc_weather.mvp.model.MainModel;
 import com.aleat0r.pc_weather.mvp.presenter.ForecastPresenter;
 import com.aleat0r.pc_weather.mvp.presenter.MainPresenter;
+import com.aleat0r.pc_weather.mvp.presenter.SplashPresenter;
 import com.aleat0r.pc_weather.network.ApiConstants;
 import com.aleat0r.pc_weather.network.OpenWeatherApiService;
 
@@ -75,6 +77,11 @@ public class AppModule {
     @Provides
     ForecastContract.Presenter provideForecastPresenter(ForecastContract.Model model) {
         return new ForecastPresenter(model);
+    }
+
+    @Provides
+    SplashContract.Presenter provideSplashPresenter() {
+        return new SplashPresenter();
     }
 
 }

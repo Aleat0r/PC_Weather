@@ -2,6 +2,7 @@ package com.aleat0r.pc_weather.dagger;
 
 import com.aleat0r.pc_weather.ui.activity.ForecastActivity;
 import com.aleat0r.pc_weather.ui.activity.MainActivity;
+import com.aleat0r.pc_weather.ui.activity.SplashScreenActivity;
 
 import javax.inject.Singleton;
 
@@ -17,5 +18,6 @@ public interface AppComponent {
 
     void inject(MainActivity mainActivity);
     void inject(ForecastActivity forecastActivity);
+    void inject(SplashScreenActivity splashScreenActivity);
 
 }
